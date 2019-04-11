@@ -11,19 +11,20 @@
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
                 <% if (title == "Home") { %> <li class="active"> <% } else { %> <li> <%}%> <a href="/">Home</a></li>
-                <% if (title == "Products Menu" || title == "Individual Product") { %> <li class="active"> <% } else { %> <li> <%}%><a href="/products">Products</a></li>
-                <% if (title == "Upload") { %> <li class="active"> <% } else { %> <li> <%}%> <a href="/upload">Upload</a></li>
-                <li><a href="#">Stores</a></li>
-                <li><a href="#">Contact</a></li>
+                <% if(user != null) { %>
+                    <% if (title == "Upload") { %> <li class="active"> <% } else { %> <li> <%}%> <a href="/upload">Upload</a></li>
+                    <% } %>
+                <li><a href="#">About us</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <% if(user != null) { %>
-                <li><a href='/profile'><span class="glyphicon glyphicon-user"></span> Logged in as  <%= user %></a></li>
+                        <li><a href='/profile/<%= userID %>'><span class="glyphicon glyphicon-user"></span> Logged in as  <%= user %></a></li>
                 <% } else { %>
-                <li><a href='/login'><span class="glyphicon glyphicon-user"></span> Login</a></li>
+                        <li><a href='/login'><span class="glyphicon glyphicon-user"></span> Login</a></li>
+                        <li><a href='/register'><span class="glyphicon glyphicon-user"></span> Register</a></li>
                 <% } %>
                 <% if(user != null) {%>
-                <li> <a href='/logout'>Log out</a></li>
+                        <li> <a href='/logout'>Log out</a></li>
                 <% } %>
 
             </ul>

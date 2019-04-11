@@ -6,7 +6,7 @@
 
 <div class="jumbotron">
     <div class="container text-center">
-        <h1>Vice Footwear</h1>
+        <h1>Vice Photo Stream</h1>
         <p>By Nhung Luu</p>
     </div>
 </div>
@@ -14,25 +14,56 @@
 <% include ../partials/nav %>
 
 
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-4">
-                    <div class="panel panel-primary">
-                        <div class="panel-body"><img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image"></div>
-                    </div>
-                </div>
-                <div class="col-sm-8">
-                    <div class="panel panel-danger">
-                        <div class="panel-heading">This is the profile for <%= user %></div>
-                        <div class="panel-body">
-                            <b>First Name:</b> <%= firstname %> <p>
-                            <b>Last Name:</b> <%= lastname %>
-                        </div>
-                        <div class="panel-footer">Check out our latest offers!</div>
-                    </div>
-                </div>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="panel panel-primary">
+                <div class="panel-body"><img src="../<%= userdata.picURL %>" class="img-responsive" style="width:100%" alt="Image"></div>
             </div>
-        </div><br>
+        </div>
+        <div class="col-sm-8">
+            <div class="panel panel-danger">
+                <div class="panel-heading">This is the profile for <%= userdata.username %></div>
+                <div class="panel-body">
+                    <b>First name:</b> <%= userdata.firstname %> <p>
+                    <b>Last name:</b> <%= userdata.lastname %> <p>
+                    <b>Date joined:</b> <%= userdata.startdate %>
+                </div>
+                <div class="panel-footer"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <% if (photodata != []) { %>
+            <% for (var i = 0; i < photodata.length; i++) {%>
+                <% if(i%4 != 0) {%>
+                    <div class="col-sm-4">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading"><a href="/photos/<%= photodata[i]["photoID"]%>"><%= photodata[i]["caption"] %></a></div>
+                            <div class="panel-body"><a href="/photos/<%= photodata[i]["photoID"]%>"><img src="../<%= photodata[i]["url"] %>" class="img-responsive" style="width:100%" alt="Image"></a></div>
+                            <!-- likes & comments count -->
+                            <!-- <div class="panel-footer"><%= photodata[i]["description"] %></div> -->
+                        </div>
+                    </div>
+                <% } else {%>
+    </div>
+</div><br>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading"><a href="/photos/<%= photodata[i]["photoID"]%>"><%= photodata[i]["caption"] %></a></div>
+                <div class="panel-body"><a href="/photos/<%= photodata[i]["photoID"]%>"><img src="../<%= photodata[i]["url"] %>" class="img-responsive" style="width:100%" alt="Image"></a></div>
+                <!-- likes & comments count -->
+                <!-- <div class="panel-footer"><%= photodata[i]["description"] %></div> -->
+            </div>
+        </div>
+        <% } %>
+        <% }%>
+        <% } %>
+    </div>
+</div><br><br>
 
 <% include ../partials/footer %>
 

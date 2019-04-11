@@ -17,7 +17,7 @@ var io = require('socket.io')(server);
 var connection = mysql.createConnection({
     host: "localhost", // the hostname of your MySQL server
     user: "root",
-    password: "123456",
+    password: "root",
     database: "luun_db" // the name of your database
 });
 
@@ -43,7 +43,7 @@ app.use(session({
     secret: "crmorytp8vyp98p%&ADIB66^^&fjdfdfaklfdhf",
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: 60000 }
+    cookie: { MaxAge: 24 * 60 * 60 * 1000 }
 }));
 
 //Middleware to make username & userID available in all templates
@@ -60,24 +60,42 @@ routes(app, connection, bcrypt, saltRounds);
 io.on('connection', function (socket) {
     console.log('A user connected');
 
+    //new comment
     socket.on('cmt', function(data) {
         //Update database
-        var sql_1 = "INSERT INTO comment (username, content, photoID) VALUES('"+data.user + "','"+ data.comment +"','"+ data.photoID +"')" ;
+        console.log(data);
+        var sql_1 = "INSERT INTO comments (userID, content, photoID) VALUES('"+data.userID + "','"+ data.comment +"','"+ data.photoID +"')" ;
         connection.query(sql_1,function(err,results){
             if(err) throw err;
             console.log('Updated comment database');
             console.log(results);
-            //Send new comment to client
-            socket.emit('newcmt', data);
-            //Send message to everyone else on the page
-            socket.broadcast.emit('newcmt', data);
+
         });
 
-        var sql_2 = "INSERT INTO photo (cmtCount) VALUES('"+data.cmtCount+"')" ;
+        //Send new comment to client to load
+        var sql_3 = "SELECT * FROM comments JOIN users WHERE comments.userID = users.userID AND comments.photoID = '" + data.photoID + "' AND comments.userID = '"+data.userID+"' ORDER BY comments.commentID DESC";
+        connection.query(sql_3, function(err, results) {
+            console.log("Latest comment query");
+            if (err) {
+                console.log(err);
+            }
+            else if (results.length > 0) {
+                var databack = results[0];
+                console.log("Data Back.");
+                console.log(databack);
+                socket.emit('newcmt', databack);
+                //Send message to everyone else on the page
+                socket.broadcast.emit('newcmt', databack);
+            }
+        });
+
+        //Update photos database with new comment count and display new number of comments
+        data.cmtCount += 1;
+        var sql_2 = "UPDATE photos SET cmtCount = '"+data.cmtCount+"' WHERE photoID = '"+data.photoID+"'" ;
         connection.query(sql_2,function(err,results){
             if(err) throw err;
             console.log('Updated comment count');
-            console.log(results);
+            //console.log(results);
             //Send new comment no
             socket.emit('pluscmt', data.cmtCount);
             //Send message to everyone else on the page
@@ -87,11 +105,15 @@ io.on('connection', function (socket) {
 
     socket.on('like', function(data) {
         //Update database
-        var sql_2 = "INSERT INTO photos (photoID, like) VALUES('"+data.photoID + "','"+ data.like +"')" ;
+        //console.log("Like initiated");
+        //console.log(data);
+        data.like +=1;
+        //console.log(data.like);
+        var sql_2 = "UPDATE photos SET likeCount = '"+ data.like +"' WHERE photoID = '"+ data.photoID + "'";
         connection.query(sql_2,function(err,results){
             if(err) throw err;
-            console.log('Like updated in database');
-            console.log(results);
+            //console.log('Like updated in database');
+            //console.log(results);
             //Send new comment to client
             socket.emit('newlike', data.like);
             //Send message to everyone on the page

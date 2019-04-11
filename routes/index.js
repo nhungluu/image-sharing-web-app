@@ -11,6 +11,7 @@ module.exports = function(app, connection, bcrypt, saltRounds) {
     app.get('/', function (req, res) {
         var sql ="SELECT * FROM photos" ;
         connection.query(sql, function(err, results) {
+            //console.log(sql);
             //console.log(results);
             //add username column to photos database
             if (results.length) {
@@ -18,10 +19,11 @@ module.exports = function(app, connection, bcrypt, saltRounds) {
                     title: 'Vice Photo Stream',
                     photos: results
                 }
+                //console.log(dataToEJS);
                 res.render('pages/index', dataToEJS);
             }
             else {
-            res.render('pages/index', {message: "No photos found"});
+            res.render('pages/index', {title: "Vice Photo Stream", photos: "", message: "No photos found"});
             }
         });
     });
@@ -42,7 +44,7 @@ module.exports = function(app, connection, bcrypt, saltRounds) {
                 res.render('pages/user_profile', dataToEJS);
             }
             else {
-                res.render('pages/user_profile', {message: "This user hasn't uploaded any photos."});
+                res.render('pages/user_profile', {title: "Vice Photo Stream", message: "This user hasn't uploaded any photos."});
             }
         });
     });
@@ -54,35 +56,55 @@ module.exports = function(app, connection, bcrypt, saltRounds) {
 
     // Set up routes to post registration details
     app.post('/register', function(req, res) {
+        var pic ="";
+        var picURL ="";
         var username = req.body.username;
         var password = req.body.password;
         var email = req.body.email;
-        var pic = req.files.myPic;
-        var picURL = "upload/images/users/" + userID + pic.name;
-        //console.log(username);
+        var firstname = req.body.firstname;
+        var lastname = req.body.lastname;
+
+        if (!req.files) {
+           console.log("No files");
+        } else {
+            pic = req.files.myPic;
+            console.log ("myfile: "+req.files.myPic);
+            console.log("Username: "+ username +" - Firstname: "+firstname+" - Lastname: "+lastname);
+            if (pic) {
+                picURL = "public/users/" + username + pic.name;
+                console.log(picURL);
+            } else {
+                picURL = "";
+            }
+        }
+
         //console.log(password)
         //encrypt password before
         bcrypt.hash(password, saltRounds, function (err, hash) {
-            var sql ="INSERT INTO photoUsers (username, password, email, pic) VALUES('"+username+ "','"+ hash +"','"+email+"','"+picURL+"')" ;
+
+            var sql ="INSERT INTO users (username, password, email, firstname, lastname, picURL) VALUES('"+username+ "','"+ hash +"','"+email+"','"+firstname+"','"+lastname+"','"+picURL+"')" ;
             connection.query(sql, function(err, results) {
-                //console.log(results);
-                if (results.length) {
+                console.log(sql);
+                console.log("Results: "+ results);
+                if (err) {
+                    console.log("error"+err);
+                    res.render('pages/register', {title: 'Register', message: 'Username or Email duplicated. Please try again.'});
+                } else {
+                    console.log("Database updated.");
                     var dataToEJS = {
                         title: 'Register',
                         message: 'User registered successfully. Please login with your details.'
                     }
-                    //console.log(file);
-                    pic.mv('upload/image/users/' + userID + pic.name);
-                    res.render('pages/register',dataToEJS);
-                } else {
-                    res.render('pages/register', {title: 'Register', message: 'Username or Email duplicated. Please try again.'});
+                    if (pic) {
+                        pic.mv(picURL);
+                        console.log("File uploaded.");
+                    }
+                    res.render('pages/login',dataToEJS);
                 }
             });
         });
     });
 
-
-    //Comment & likes
 
 
     //Login Page
@@ -106,9 +128,10 @@ module.exports = function(app, connection, bcrypt, saltRounds) {
                     if(result == true) {
                         req.session.user = username;
                         req.session.userID = results[0]["userID"];
-                        //console.log("User =" + req.session.user);
+                        console.log("User =" + req.session.user);
+                        console.log("User =" + req.session.userID);
                         //req.session.views = req.session.views + 1;
-                        res.redirect('/profile');
+                        res.redirect('/');
                     }
                     else {
                         res.render('pages/login', {title: 'Login', message: 'Wrong password. Please try again.'});
@@ -126,30 +149,42 @@ module.exports = function(app, connection, bcrypt, saltRounds) {
         res.redirect("/");
     })
 
+    //Logout - session ends
+    app.get('/upload', function(req, res){
+        if(req.session.user) {
+            res.render('pages/upload', {title: 'Upload Photos', message: ""});
+        }
+        else res.render('pages/login', {title: 'Upload Photo', message: "Please login to upload photos."});
+    })
+
     //Set up route to upload photo to users directory
     app.post('/upload', function(req, res) {
-        var file = req.files.myFile;
+        var file = req.files.myPic;
+        var username = req.session.user;
         var userID = req.session.userID;
         var caption = req.body.caption;
         var description = req.body.description;
         var d = new Date();
-        var fileName = d.getFullYear() + (d.getMonth()+1) + d.getDay() +"_" + d.getHours() + d.getMinutes() + d.getSeconds();
-        var url = "upload/images/" + userID + "/" + fileName;
+        var fileName = d.getFullYear() + (d.getMonth()+1) + d.getDay() +"_" + d.getHours() + d.getMinutes() + d.getSeconds() + file.name;
+        var url = "public/images/" + username + fileName;
+        console.log("Username: "+ username +" - Caption: "+caption+" - Lastname: "+description);
 
         var sql ="INSERT INTO photos (caption, description, userID, url) VALUES('"+caption+ "','"+ description +"','"+userID+"','"+url+"')" ;
 
         connection.query(sql, function(err, results) {
             //console.log(results);
-            if (results.length) {
+            if(err) {
+                res.render('pages/upload', {title: 'Upload', message: 'Upload failed. Please try again.'});
+                console.log(err);
+            }
+            else {
                 var dataToEJS = {
                     title: 'Upload',
                     message: 'Successfully uploaded photo'
                 }
                 //console.log(file);
-                file.mv('upload/images/' + userID +'/' + fileName);
+                file.mv(url);
                 res.render('pages/upload',dataToEJS);
-            } else {
-                res.render('pages/upload', {title: 'Upload', message: 'Upload failed. Please try again.'});
             }
         });
     });
@@ -158,23 +193,59 @@ module.exports = function(app, connection, bcrypt, saltRounds) {
     //Individual Photo Page
     app.get('/photos/:id', function (req, res) {
         var photoID = req.params.id;
-        //console.log(photoID);
-        //join with user & comments to get username, comment list, people who comment, time
-        var sql = "SELECT * FROM photos WHERE photoID = '" + photoID + "'";
-        connection.query(sql, function(err, results) {
+        var photos; // store data of photo to be displayed and its owner
+        var comments; //store data of comments related to the photo to be displayed
+
+        //join users & photos to get user and photo information
+        var sql_1 = "SELECT * FROM photos JOIN users WHERE photos.userID = users.userID AND photoID = '" + photoID + "'";
+        connection.query(sql_1, function(err, results) {
             //console.log(results);
-            if (results.length) {
-                var dataToEJS = {
-                    message: "",
-                    photoID: photoID,
-                    title: results[0]["caption"],
-                    photo: results
-                }
-                res.render('pages/each_photo', dataToEJS);
-            } else {
-                res.render('pages/each_photo', {title: 'Photo', message: 'Photo not found.'});
+            if (err) {
+                console.log(err);
+            }
+            else if (results.length > 0) {
+                photos = results;
+                commentsQuery(); //query for comments related to photos
             }
         });
+
+        //join comments and users to get all comments and users attached to the photo to be displayed
+        function commentsQuery() {
+            var sql_2 = "SELECT * FROM comments JOIN users WHERE comments.userID = users.userID AND comments.photoID = '" + photoID + "' ORDER BY comments.timeComment DESC";
+            connection.query(sql_2, function(err, results) {
+                console.log("Comments Query");
+                //console.log(results);
+                //console.log("Result length: " + results.length);
+                if (err) {
+                    console.log(err);
+                }
+                else {
+                    if (results.length > 0) {
+                        comments = results;
+                        var dataToEJS = {
+                            message: "",
+                            photos: photos,
+                            comments: comments,
+                            title: photos[0]["caption"]
+                        }
+                        res.render('pages/each_photo', dataToEJS);
+                        console.log("dataToEJS");
+                        console.log(dataToEJS);
+                    }
+                    else {
+                        var dataToEJS = {
+                            message: "",
+                            photos: photos,
+                            comments: "",
+                            title: photos[0]["caption"]
+                        }
+                        res.render('pages/each_photo', dataToEJS);
+                        console.log("dataToEJS");
+                        console.log(dataToEJS);
+                    }
+                }
+            });
+        }
     });
 
     //Search Page
@@ -189,22 +260,37 @@ module.exports = function(app, connection, bcrypt, saltRounds) {
     });
 
     //Profile
-    app.get('/profile', function (req, res) {
-        var sql ="SELECT * FROM users WHERE username = '" + req.session.user +"'";
+    app.get('/profile/:id', function (req, res) {
+        var userID = req.params.id;
+        var users;
+        var photos;
+        var sql_1 ="SELECT * FROM users WHERE users.userID = '" + userID +"'";
+        var sql_2 = "SELECT * FROM photos WHERE photos.userID = '" + userID +"'";
         //join with photos for list of photos
-        connection.query(sql, function(err, results) {
+        connection.query(sql_1, function(err, results) {
             console.log(results);
-            if (results.length) {
-                console.log(results[0]["firstname"]);
-                var dataToEJS = {
-                    title: 'Profile',
-                    firstname: results[0]["firstname"], //results["firstname"];
-                    lastname: results[0]["surname"]
-                };
-                res.render('pages/profile', dataToEJS);
+            if (err){
+                console.log(err);
+            }
+            else if (results.length > 0){
+                users = results[0];
+                connection.query(sql_2, function(err, results) {
+                    console.log(results);
+                    if (err) {
+                        console.log(err);
+                    }
+                    else {
+                        photos = results;
+                        var dataToEJS = {
+                            title: 'Profile',
+                            userdata: users,
+                            photodata: photos
+                        };
+                        console.log(dataToEJS);
+                        res.render('pages/profile', dataToEJS);
+                    }
+                });
 
-            } else {
-                res.render('pages/login', {title: 'Login', message: 'Login to view your profile.'});
             }
         });
     });

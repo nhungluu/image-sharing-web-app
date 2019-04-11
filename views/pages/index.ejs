@@ -48,14 +48,15 @@
             <span class="sr-only">Next</span>
         </a>
     </div>
-
+<br>
     <div class="row">
+        <% if (photos != []) { %>
         <% for (var i = 0; i < photos.length; i++) {%>
-            <% if(i%4 != 0) {%>
+            <% if((i+1)%4 != 0) {%>
                 <div class="col-sm-4">
                     <div class="panel panel-primary">
                         <div class="panel-heading"><a href="/photos/<%= photos[i]["photoID"]%>"><%= photos[i]["caption"] %></a></div>
-                        <div class="panel-body"><a href="/photos/<%= photos[i]["photoID"]%>"><img src="<%= photos[i]["url"] %>" class="img-responsive" style="width:100%" alt="Image"></a></div>
+                        <div class="panel-body"><a href="/photos/<%= photos[i]["photoID"]%>"><img src="../<%= photos[i]["url"] %>" class="img-responsive" style="width:100%" alt="Image"></a></div>
                         <!-- likes & comments count -->
                         <!-- <div class="panel-footer"><%= photos[i]["description"] %></div> -->
                     </div>
@@ -68,14 +69,14 @@
         <div class="col-sm-4">
             <div class="panel panel-primary">
                 <div class="panel-heading"><a href="/photos/<%= photos[i]["photoID"]%>"><%= photos[i]["caption"] %></a></div>
-                <div class="panel-body"><a href="/photos/<%= photos[i]["photoID"]%>"><img src="<%= photos[i]["url"] %>" class="img-responsive" style="width:100%" alt="Image"></a></div>
+                <div class="panel-body"><a href="/photos/<%= photos[i]["photoID"]%>"><img src="../<%= photos[i]["url"] %>" class="img-responsive" style="width:100%" alt="Image"></a></div>
                 <!-- likes & comments count -->
                 <!-- <div class="panel-footer"><%= photos[i]["description"] %></div> -->
             </div>
         </div>
             <% } %>
         <% }%>
-
+    <% } %>
     </div>
 </div><br><br>
 

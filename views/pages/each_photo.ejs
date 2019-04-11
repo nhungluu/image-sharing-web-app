@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang=”en”>
 <!-- some comment -->
-<!-- <% include ../partials/header %> -->
+<%# include ../partials/header %>
 <head>
-    <title>Vice Footwear</title>
+    <title>Vice Photo Stream</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -13,28 +13,44 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
         var socket = io.connect();
-        var sessionUser = <%-JSON.stringify(user)%>;
-        var photoID;
+        //var sessionUser = <%-JSON.stringify(user)%>;
+        //var photoID;
         //send comment to server
-        function postComment() {
-            var cmt = document.getElementById('comment').value;
-            var cmtCount = document.getElementById('comment-status').value + 1;
+        function postComment(photoID, userID) {
+            var cmt = document.getElementById('comment-text').value; //for textarea, it needs to be DOM value
+            var cmtCount = parseInt(document.getElementById('comment-status').innerText);
             if(cmt) {
-                socket.emit('cmt', {comment: cmt, user: sessionUser, photoID: photoID, cmtCount: cmtCount});
+                socket.emit('cmt', {comment: cmt, userID: userID, photoID: photoID, cmtCount: cmtCount});
             }
+            document.getElementById('comment-text').value = "";
         }
         //send likes to server
-        function liked(){
-            var like = document.getElementById('like-status').value + 1;
+        function liked(photoID){
+            //var like = 0;
+            var like = parseInt(document.getElementById("like-status").innerText);
             socket.emit('like', {like: like, photoID: photoID});
         }
+
         //update with new comments
         socket.on('newcmt', function(data) {
             //to be edited
-            document.getElementById('comment-container').innerHTML += '<div><b>' +
-                data.user + '</b>: ' + data.message + '</div>'
-            document.getElementById('comment-status').innerHTML += '<div><b>' +
-                data.user + '</b>: ' + data.message + '</div>'
+            //document.getElementById('comment-container').innerHTML += '<div><b>' +
+            //    data.userID + '</b>: ' + data.content + '</div>'
+            var html = document.getElementById('comment-container').innerHTML;
+            document.getElementById('comment-container').innerHTML = '<li class="media">'
+                    + '<a href="/profile/'+ data.userID +'" class="pull-left">'
+                    + '<img src="../'+ data.picURL +'" alt="" class="img-circle">'
+                    + '</a>'
+                    + '<div class="media-body">'
+                    + '<span class="text-muted pull-right">'
+                    + '<small class="text-muted">'+ data.timeComment +'</small>'
+                    + '</span>'
+                    + '<strong class="text-success">@'+ data.firstname + '</strong>'
+                    + '<p> '+ data.content + '</p>'
+                    + '</div>'
+                    + '</li>'
+                    + html;
+
         })
 
         //update with new likes
@@ -46,6 +62,7 @@
         socket.on('pluscmt', function(cmtCount) {
             document.getElementById('comment-status').innerHTML = cmtCount;
         })
+
     </script>
 </head>
 <body>
@@ -59,58 +76,98 @@
 
 <% include ../partials/nav %>
 
-<% products.myProducts.forEach(function (eachProduct) {%>
-<% if(eachProduct.id == product) {%>
 
 <div class="container">
     <div class="row">
+        <% for (var i = 0; i < photos.length; i++) { %>
         <div class="col-sm-4">
             <div class="panel panel-primary">
-                //User photo thumbnail & name
-                <div class="panel-body"><img src="../public/images/<%= eachProduct.photo %>" class="img-responsive" style="width:100%" alt="Image"></div>
+                <%#User photo thumbnail & name%>
+                <div class="panel-body"><a href="/profile/<%= photos[i].userID %>"><img src="../<%= photos[i].picURL %>" class="img-responsive" style="width:100%" alt="Image" class="img-circle"></a></div>
+                <div class="panel-heading"><a href="/profile/<%= photos[i].userID %>"><%= photos[i].firstname %> <%= photos[i].lastname %> </a></div>
             </div>
         </div>
         <div class="col-sm-8">
-            //Image
+            <%#Image%>
             <div class="panel panel-primary">
-                <div class="panel-body"><img src="../<%= results[0]["url"] %>" class="img-responsive" style="width:100%" alt="Image"></div>
-            </div>
-
-            //Caption & Description
-            <div class="panel panel-danger">
-                <div class="panel-heading"><%= results[0]["caption"] %></div>
+                <div class="panel-body"><img src="../<%= photos[i].url %>" class="img-responsive" style="width:100%" alt="Image"></div>
+                <%# Caption & Description %>
                 <div class="panel-footer">
-                    //Like & Comment count status
+                    <%#Like & Comment count status%>
                     <% if(user != null) { %>
-                        <button type="button" class="btn btn-primary" onclick = "liked()">Like</button>
-                    <% } %>
-                    <div id = "comment-status"> </div>
-                    <div id = "like-status"> </div>
+                        <button type=button class="btn btn-info btn-lg" onclick = "liked(<%= photos[i].photoID %>)">
+                            <span class="glyphicon glyphicon-thumbs-up"></span> Like
+                        </button>
+                        &nbsp
+                    <% } else { %>
+                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                    <% }%>
+                    <span id="like-status"> <%= photos[i].likeCount %> </span> likes &nbsp
+                    <span class="glyphicon glyphicon-comment"></span>
+                    <span id="comment-status"> <%= photos[i].cmtCount %> </span> comments
+                </div>
+                <div class="panel-footer">
+                    <%= photos[i].caption %>
                 </div>
                 <div class="panel-body">
-                    <%= results[0]["description"] %>
+                    <%= photos[i].description %>
                 </div>
+
             </div>
 
-            //comment box appears to logged-in users
             <% if(user != null) { %>
-            <div id = "comment">
-                <div class="form-group">
-                    <label for="comment">Comment:</label>
-                    <textarea class="form-control" rows="5" id="comment"></textarea>
+                <div class="form-group" id="comment">
+                    <textarea class="form-control" placeholder="write a comment..." rows="3" id="comment-text"></textarea>
+                    <br>
+                    <button type="button" class="btn btn-info pull-right" onclick = "postComment(<%= photos[i]["photoID"]%>, <%= userID%>)">Post</button>
+                    <%#userID is a local variable from session %>
+                    <br>
                 </div>
-                <button type="button" class="btn btn-primary" onclick = "postComment()">Post Comment</button>
-            </div>
             <% } %>
-            //Load previous comments
-            <div id = "comment-container">
+            <br>
+            <%# Load previous comments %>
+            <div class="comment-wrapper">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        Photo Comments
+                    </div>
+                    <div class="panel-body">
+                        <%# comment box appears to logged-in users %>
 
+            <% } %>
+                            <ul class="media-list">
+
+                                <div id="comment-container">
+                                 <% if (comments) { %>
+                                <% for (var i = 0; i < comments.length; i++) {%>
+
+                                    <li class="media">
+                                        <a href="/profile/<%= comments[i]["userID"]%>" class="pull-left">
+                                            <img src="../<%= comments[i]["picURL"]%>" alt="" class="img-circle">
+                                        </a>
+                                        <div class="media-body">
+                                        <span class="text-muted pull-right">
+                                            <small class="text-muted"><%= comments[i]["timeComment"]%></small>
+                                        </span>
+                                            <strong class="text-success">@<%= comments[i]["firstname"]%></strong>
+                                            <p> <%= comments[i]["content"]%> </p>
+                                        </div>
+                                        <br>
+                                    </li>
+                                <% } %>
+                                </div>
+                            </ul>
+
+                        <% } %>
+
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div><br>
 
-<% };});%>
+<% %>
 <% include ../partials/footer %>
 
 </body>
