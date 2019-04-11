@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang=”en”>
+<!-- some comment -->
+<!-- <% include ../partials/header %> -->
+<head>
+    <title>Vice Footwear</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/public/stylesheets/style.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io.connect();
+        var sessionUser = <%-JSON.stringify(user)%>;
+        var photoID;
+        //send comment to server
+        function postComment() {
+            var cmt = document.getElementById('comment').value;
+            var cmtCount = document.getElementById('comment-status').value + 1;
+            if(cmt) {
+                socket.emit('cmt', {comment: cmt, user: sessionUser, photoID: photoID, cmtCount: cmtCount});
+            }
+        }
+        //send likes to server
+        function liked(){
+            var like = document.getElementById('like-status').value + 1;
+            socket.emit('like', {like: like, photoID: photoID});
+        }
+        //update with new comments
+        socket.on('newcmt', function(data) {
+            //to be edited
+            document.getElementById('comment-container').innerHTML += '<div><b>' +
+                data.user + '</b>: ' + data.message + '</div>'
+            document.getElementById('comment-status').innerHTML += '<div><b>' +
+                data.user + '</b>: ' + data.message + '</div>'
+        })
+
+        //update with new likes
+        socket.on('newlike', function(like) {
+            document.getElementById('like-status').innerHTML = like;
+        })
+
+        //update with new number of comments
+        socket.on('pluscmt', function(cmtCount) {
+            document.getElementById('comment-status').innerHTML = cmtCount;
+        })
+    </script>
+</head>
+<body>
+
+<div class="jumbotron">
+    <div class="container text-center">
+        <h1>Vice Image Gallery</h1>
+        <p>By Nhung Luu</p>
+    </div>
+</div>
+
+<% include ../partials/nav %>
+
+<% products.myProducts.forEach(function (eachProduct) {%>
+<% if(eachProduct.id == product) {%>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="panel panel-primary">
+                //User photo thumbnail & name
+                <div class="panel-body"><img src="../public/images/<%= eachProduct.photo %>" class="img-responsive" style="width:100%" alt="Image"></div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            //Image
+            <div class="panel panel-primary">
+                <div class="panel-body"><img src="../<%= results[0]["url"] %>" class="img-responsive" style="width:100%" alt="Image"></div>
+            </div>
+
+            //Caption & Description
+            <div class="panel panel-danger">
+                <div class="panel-heading"><%= results[0]["caption"] %></div>
+                <div class="panel-footer">
+                    //Like & Comment count status
+                    <% if(user != null) { %>
+                        <button type="button" class="btn btn-primary" onclick = "liked()">Like</button>
+                    <% } %>
+                    <div id = "comment-status"> </div>
+                    <div id = "like-status"> </div>
+                </div>
+                <div class="panel-body">
+                    <%= results[0]["description"] %>
+                </div>
+            </div>
+
+            //comment box appears to logged-in users
+            <% if(user != null) { %>
+            <div id = "comment">
+                <div class="form-group">
+                    <label for="comment">Comment:</label>
+                    <textarea class="form-control" rows="5" id="comment"></textarea>
+                </div>
+                <button type="button" class="btn btn-primary" onclick = "postComment()">Post Comment</button>
+            </div>
+            <% } %>
+            //Load previous comments
+            <div id = "comment-container">
+
+            </div>
+        </div>
+    </div>
+</div><br>
+
+<% };});%>
+<% include ../partials/footer %>
+
+</body>
+</html>

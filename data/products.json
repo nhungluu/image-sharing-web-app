@@ -1,0 +1,53 @@
+{
+  "description": "This is the list of all products.",
+  "myProducts": [
+    {
+      "id": "0001",
+      "name": "Stella",
+      "summary": "Suede ankle boots with heels",
+      "stock": 10,
+      "photo": "0001.jpg",
+      "price": "100"
+    },
+    {
+      "id": "0002",
+      "name": "Amina",
+      "summary": "Dark Chocolate leather boots with lace",
+      "stock": 20,
+      "photo": "0002.jpg",
+      "price": "120"
+    },
+    {
+      "id": "0003",
+      "name": "Diane",
+      "summary": "Tall suede boots with low heels",
+      "stock": 10,
+      "photo": "0003.jpg",
+      "price": "34"
+    },
+    {
+      "id": "0004",
+      "name": "Kenova",
+      "summary": "Leather hiking-inspired boots",
+      "stock": 20,
+      "photo": "0004.jpg",
+      "price": "34"
+    },
+    {
+      "id": "0005",
+      "name": "Joyce",
+      "summary": "Leather pumps with ankle strap",
+      "stock": 10,
+      "photo": "0005.jpg",
+      "price": "110"
+    },
+    {
+      "id": "0006",
+      "name": "Mya",
+      "summary": "Suede loafers",
+      "stock": 7,
+      "photo": "0006.jpg",
+      "price": "100"
+    }
+  ]
+}

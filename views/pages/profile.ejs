@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang=”en”>
+<% include ../partials/header %>
+
+<body>
+
+<div class="jumbotron">
+    <div class="container text-center">
+        <h1>Vice Footwear</h1>
+        <p>By Nhung Luu</p>
+    </div>
+</div>
+
+<% include ../partials/nav %>
+
+
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="panel panel-primary">
+                        <div class="panel-body"><img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image"></div>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">This is the profile for <%= user %></div>
+                        <div class="panel-body">
+                            <b>First Name:</b> <%= firstname %> <p>
+                            <b>Last Name:</b> <%= lastname %>
+                        </div>
+                        <div class="panel-footer">Check out our latest offers!</div>
+                    </div>
+                </div>
+            </div>
+        </div><br>
+
+<% include ../partials/footer %>
+
+</body>
+</html>

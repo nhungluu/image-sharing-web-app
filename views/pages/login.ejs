@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang=”en”>
+<% include ../partials/header %>
+
+<body>
+
+<div class="jumbotron">
+    <div class="container text-center">
+        <h1>Vice Footwear</h1>
+        <p>By Nhung Luu</p>
+    </div>
+</div>
+
+<% include ../partials/nav %>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="panel panel-primary">
+                <div class="panel-body"><img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image"></div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="panel panel-danger">
+                <div class="panel-heading">Login to Our Website</div>
+                <div class="panel-body"><form class="form-horizontal" action="http://127.0.0.1:3000/login" method ="POST">
+                        <div class="form-group">
+                            <label class="control-label col-sm-2">Username:</label>
+                            <div class="col-sm-10">
+                                <input type="username" class="form-control" id="username" placeholder="Enter username" name="username">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="pwd">Password:</label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" id="password" placeholder="Enter password" name="password">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <div class="checkbox">
+                                    <label><input type="checkbox" name="remember"> Remember me</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-default">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="panel-footer"><%= message %></div>
+            </div>
+        </div>
+    </div>
+</div><br>
+
+
+<% include ../partials/footer %>
+<% include ../partials/scripts %>
+
+</body>
+</html>

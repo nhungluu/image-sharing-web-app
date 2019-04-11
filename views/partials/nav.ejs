@@ -1,0 +1,32 @@
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Logo</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <% if (title == "Home") { %> <li class="active"> <% } else { %> <li> <%}%> <a href="/">Home</a></li>
+                <% if (title == "Products Menu" || title == "Individual Product") { %> <li class="active"> <% } else { %> <li> <%}%><a href="/products">Products</a></li>
+                <% if (title == "Upload") { %> <li class="active"> <% } else { %> <li> <%}%> <a href="/upload">Upload</a></li>
+                <li><a href="#">Stores</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <% if(user != null) { %>
+                <li><a href='/profile'><span class="glyphicon glyphicon-user"></span> Logged in as  <%= user %></a></li>
+                <% } else { %>
+                <li><a href='/login'><span class="glyphicon glyphicon-user"></span> Login</a></li>
+                <% } %>
+                <% if(user != null) {%>
+                <li> <a href='/logout'>Log out</a></li>
+                <% } %>
+
+            </ul>
+        </div>
+    </div>
+</nav>

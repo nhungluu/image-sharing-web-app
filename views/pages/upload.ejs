@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang=”en”>
+<% include ../partials/header %>
+
+<body>
+
+<div class="jumbotron">
+    <div class="container text-center">
+        <h1>Vice Footwear</h1>
+        <p>By Nhung Luu</p>
+    </div>
+</div>
+
+<% include ../partials/nav %>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="panel panel-primary">
+                <div class="panel-body"><img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image"></div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="panel panel-danger">
+                <div class="panel-heading">Upload File</div>
+                <div class="panel-body">
+                    <form class="form-horizontal"  enctype="multipart/form-data" action="http://127.0.0.1:3000/upload" method ="POST">
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-2" for="pwd">File:</label>
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <input type="file" class="form-control-file" name="myFile">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="usr">Caption:</label>
+                            <input type="text" class="form-control" id="caption">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="comment">Description:</label>
+                            <textarea class="form-control" rows="5" id="description"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-default">Upload</button>
+                            </div>
+                        </div>
+                    </form>
+                <div class="panel-footer"><%= message %></div>
+            </div>
+        </div>
+    </div>
+</div><br>
+
+
+<% include ../partials/footer %>
+<% include ../partials/scripts %>
+
+</body>
+</html>

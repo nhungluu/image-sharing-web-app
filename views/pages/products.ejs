@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang=”en”>
+<% include ../partials/header %>
+
+<body>
+
+<div class="jumbotron">
+    <div class="container text-center">
+        <h1>Vice Footwear</h1>
+        <p>By Nhung Luu</p>
+    </div>
+</div>
+
+<% include ../partials/nav %>
+
+<div class="container">
+    <div class="row">
+
+    <% products.myProducts.forEach(function (eachProduct) {%>
+        <% if(eachProduct.id != "0004") {%>
+        <div class="col-sm-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading"><a href="/products/<%= eachProduct.id %>"><%= eachProduct.name %></a></div>
+                <div class="panel-body"><a href="/products/<%= eachProduct.id %>"><img src="../public/images/<%= eachProduct.photo %>" class="img-responsive" style="width:100%" alt="Image"></a></div>
+                <div class="panel-footer"><%= eachProduct.summary %></div>
+            </div>
+        </div>
+        <% } else {%>
+    </div>
+</div><br>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading"><a href="/products/<%= eachProduct.id %>"><%= eachProduct.name %></a></div>
+                <div class="panel-body"><a href="/products/<%= eachProduct.id %>"><img src="../public/images/<%= eachProduct.photo %>" class="img-responsive" style="width:100%" alt="Image"></a></div>
+                <div class="panel-footer"><%= eachProduct.summary %></div>
+            </div>
+        </div>
+        <% } %>
+        <% });%>
+
+    </div>
+</div><br><br>
+
+
+<% include ../partials/footer %>
+
+</body>
+</html>

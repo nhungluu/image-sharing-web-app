@@ -1,0 +1,52 @@
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+#about {
+  padding-top: 48px;
+}
+.footer {
+  background-color: #f2f2f2;
+  padding: 25px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+}
+.footer p {
+  line-height: 60px;
+  color: white;
+}
+
+/* Remove the navbar's default rounded borders and increase the bottom margin */
+.navbar {
+  margin-bottom: 50px;
+  /*border-radius: 0;*/
+}
+
+/* Remove the jumbotron's default bottom margin */
+.jumbotron {
+  margin-bottom: 0;
+}
+
+.carousel-inner {
+  width:100%;
+  max-height:500px !important;
+  overflow:hidden;
+}
+.panel-primary a {
+  color: white;
+}
+
+.panel-heading {
+  background-color: #e2a92e; !important;
+  border-color: #e2a92e; !important;
+  color: #000; !important;
+}
