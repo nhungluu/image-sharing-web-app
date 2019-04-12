@@ -4,6 +4,8 @@
 
 <body>
 
+<% include ../partials/nav %>
+
 <div class="jumbotron">
     <div class="container text-center">
         <h1>Vice Photo Stream</h1>
@@ -11,7 +13,7 @@
     </div>
 </div>
 
-<% include ../partials/nav %>
+
 
 <div class="container">
 
@@ -49,30 +51,25 @@
         </a>
     </div>
 <br>
-    <div class="row">
+    <div class="row portfolios-area">
         <% if (photos != []) { %>
         <% for (var i = 0; i < photos.length; i++) {%>
             <% if((i+1)%4 != 0) {%>
                 <div class="col-sm-4">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading"><a href="/photos/<%= photos[i]["photoID"]%>"><%= photos[i]["caption"] %></a></div>
-                        <div class="panel-body"><a href="/photos/<%= photos[i]["photoID"]%>"><img src="../<%= photos[i]["url"] %>" class="img-responsive" style="width:100%" alt="Image"></a></div>
-                        <!-- likes & comments count -->
-                        <!-- <div class="panel-footer"><%= photos[i]["description"] %></div> -->
-                    </div>
+
+                        <div class="pi-inner"><a href="/photos/<%= photos[i]["photoID"]%>"><%= photos[i]["caption"] %></a></div>
+                        <div class="portfolio-item set-bg"><a href="/photos/<%= photos[i]["photoID"]%>"><img src="../<%= photos[i]["url"] %>" class="img-responsive" style="width:100%" alt="Image"></a></div>
+
                 </div>
             <% } else {%>
     </div>
 </div><br>
-<div class="container">
+<div class="container portfolios-area">
     <div class="row">
-        <div class="col-sm-4">
-            <div class="panel panel-primary">
-                <div class="panel-heading"><a href="/photos/<%= photos[i]["photoID"]%>"><%= photos[i]["caption"] %></a></div>
-                <div class="panel-body"><a href="/photos/<%= photos[i]["photoID"]%>"><img src="../<%= photos[i]["url"] %>" class="img-responsive" style="width:100%" alt="Image"></a></div>
-                <!-- likes & comments count -->
-                <!-- <div class="panel-footer"><%= photos[i]["description"] %></div> -->
-            </div>
+        <div class="col-sm-6">
+                <div class="pi-inner"><a href="/photos/<%= photos[i]["photoID"]%>"><%= photos[i]["caption"] %></a></div>
+                <div class="portfolio-item set-bg"><a href="/photos/<%= photos[i]["photoID"]%>"><img src="../<%= photos[i]["url"] %>" class="img-responsive" style="width:100%" alt="Image"></a></div>
+
         </div>
             <% } %>
         <% }%>
