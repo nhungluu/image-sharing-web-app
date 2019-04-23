@@ -8,7 +8,7 @@ This is an online image sharing web app. Users can register Image Sharing Web ap
 - mySQL - Database
 # Directory Layout
 .
-├── /public/                      # Frontend interface files
+├── /public/                      # Frontend interface files #
 │   ├── /images/                  # images uploaded by user
 │   ├── /stylesheets/             # Frontend css style
 │     ├── /style.css              # Master css style
