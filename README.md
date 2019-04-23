@@ -25,7 +25,7 @@ This is an online image sharing web app. Users can register Image Sharing Web ap
 │     ├── /upload.ejs/            # Upload new photo
 │   ├── /partials/                # Individual parts for all ejs views
 │     ├── /footer.ejs             # footer
-│     ├── /header.ejs             # header
+│     ├── /header.ejs             # header 
 │     ├── /nav.ejs                # navigation bar
 │     ├── /scripts.ejs            # scripts
 ├── server.js                     # Node.js server (entry point)
