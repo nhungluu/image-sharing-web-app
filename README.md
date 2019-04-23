@@ -10,15 +10,15 @@ This is an online image sharing web app. Users can register Image Sharing Web ap
 .
 - ├── /public/                      # Frontend interface files
 - │   ├── /images/                  # images uploaded by user
- │   ├── /stylesheets/             # Frontend css style
+- │   ├── /stylesheets/             # Frontend css style
 - │     ├── /style.css              # Master css style
- │   ├── /users/                   # Profile pictures uploaded by users
- ├── /routes/                      # Express endpoints
- │   ├── /index.js/                # Express endpoints
-├── /views/                       # Frontend rendered views in ejs
-│   ├── /pages/                   # All ejs rendered views
-│     ├── /each_photo.ejs         # Display one photo with user information, likes, and comments
-│     ├── /index.ejs              # Homepage with a list of photos
+- │   ├── /users/                   # Profile pictures uploaded by users
+- ├── /routes/                      # Express endpoints
+- │   ├── /index.js/                # Express endpoints
+- ├── /views/                       # Frontend rendered views in ejs
+- │   ├── /pages/                   # All ejs rendered views
+│     ├── /each_photo.ejs         # Display one photo with user information, likes, and comments \
+│     ├── /index.ejs              # Homepage with a list of photos \
 │     ├── /login.ejs              # Login page
 │     ├── /profile.ejs            # Personal profile of each user with a list of photos uploaded
 │     ├── /register.ejs           # Register new account
