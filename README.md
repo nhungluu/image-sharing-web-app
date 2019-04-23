@@ -14,10 +14,10 @@ This is an online image sharing web app. Users can register Image Sharing Web ap
 ```bash
 .
 ├── /public/                      # Frontend interface files
-│  ├── /images/                  # images uploaded by use
-│  ├── /stylesheets/             # Frontend css style
+│   ├── /images/                  # images uploaded by use
+│   ├── /stylesheets/             # Frontend css style
 │     ├── /style.css              # Master css style
-│  ├── /users/                   # Profile pictures uploaded by users
+│   ├── /users/                   # Profile pictures uploaded by users
 ├── /routes/                      # Express endpoints
 │   ├── /index.js/                # Express endpoints
 ├── /views/                       # Frontend rendered views in ejs
