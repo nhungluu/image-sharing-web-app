@@ -7,27 +7,27 @@ This is an online image sharing web app. Users can register Image Sharing Web ap
 - Socket.io — Real-time comment & like
 - mySQL - Database
 # Directory Layout
-.
+./
 ├── /public/                      # Frontend interface files \
-│   ├── /images/                  # images uploaded by user\
-│   ├── /stylesheets/             # Frontend css style\
-│     ├── /style.css              # Master css style\
-│   ├── /users/                   # Profile pictures uploaded by users\
+│&nbsp;   ├── /images/                  # images uploaded by user\
+│ &nbsp;  ├── /stylesheets/             # Frontend css style\
+│&nbsp;     ├── /style.css              # Master css style\
+│&nbsp;   ├── /users/                   # Profile pictures uploaded by users\
 ├── /routes/                      # Express endpoints\
-│   ├── /index.js/                # Express endpoints\
+│ &nbsp;  ├── /index.js/                # Express endpoints\
 ├── /views/                       # Frontend rendered views in ejs\
-│   ├── /pages/                   # All ejs rendered views\
-│     ├── /each_photo.ejs         # Display one photo with user information, likes, and comments \
-│     ├── /index.ejs              # Homepage with a list of photos \
-│     ├── /login.ejs              # Login page\
-│     ├── /profile.ejs            # Personal profile of each user with a list of photos uploaded\
-│     ├── /register.ejs           # Register new account\
-│     ├── /upload.ejs/            # Upload new photo\
-│   ├── /partials/                # Individual parts for all ejs views\
-│     ├── /footer.ejs             # footer\
-│     ├── /header.ejs             # header \
-│     ├── /nav.ejs                # navigation bar\
-│     ├── /scripts.ejs            # scripts\
+│&nbsp;   ├── /pages/                   # All ejs rendered views\
+│ &nbsp;    ├── /each_photo.ejs         # Display one photo with user information, likes, and comments \
+│&nbsp;     ├── /index.ejs              # Homepage with a list of photos \
+│ &nbsp;    ├── /login.ejs              # Login page\
+│&nbsp;     ├── /profile.ejs            # Personal profile of each user with a list of photos uploaded\
+│&nbsp;     ├── /register.ejs           # Register new account\
+│ &nbsp;    ├── /upload.ejs/            # Upload new photo\
+│&nbsp;   ├── /partials/                # Individual parts for all ejs views\
+│&nbsp;     ├── /footer.ejs             # footer\
+│&nbsp;     ├── /header.ejs             # header \
+│ &nbsp;    ├── /nav.ejs                # navigation bar\
+│&nbsp;     ├── /scripts.ejs            # scripts\
 ├── server.js                     # Node.js server (entry point)\
 ├── package.json                  # List of project dependencies\
 
